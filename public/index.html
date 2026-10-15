@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MDR Check Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Check Generator</h1><span class="sub">Payable to MDR Fitness Corp</span></header>
+
+<main>
+    <form id="form" autocomplete="off" novalidate>
+        <fieldset>
+            <legend>Payer (who is writing the check)</legend>
+            <label>Name <input name="payerName" required><small class="err" data-for="payerName"></small></label>
+            <label>Address line 1 <input name="payerAddress1" required><small class="err" data-for="payerAddress1"></small></label>
+            <label>City, State ZIP <input name="payerAddress2"><small class="err" data-for="payerAddress2"></small></label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Bank</legend>
+            <label>Bank name <input name="bankName" required><small class="err" data-for="bankName"></small></label>
+            <div class="row">
+                <label>Routing number <input name="routing" inputmode="numeric" maxlength="9" required><small class="err" data-for="routing"></small></label>
+                <label>Account number <input name="account" inputmode="numeric" maxlength="17" required><small class="err" data-for="account"></small></label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Check</legend>
+            <div class="row">
+                <label>Check no. <input name="checkNumber" inputmode="numeric" required><small class="err" data-for="checkNumber"></small></label>
+                <label>Date <input name="date" type="date" required><small class="err" data-for="date"></small></label>
+                <label>Amount ($) <input name="amount" inputmode="decimal" placeholder="0.00" required><small class="err" data-for="amount"></small></label>
+            </div>
+            <div class="row">
+                <label>Reference <input name="reference" maxlength="20"><small class="err" data-for="reference"></small></label>
+                <label>Memo <input name="memo" maxlength="40"><small class="err" data-for="memo"></small></label>
+            </div>
+            <p class="hint" id="numHint"></p>
+        </fieldset>
+
+        <div class="actions">
+            <button type="button" id="printBtn" class="primary">Save &amp; open PDF to print</button>
+            <button type="button" id="downloadBtn">Save &amp; download PDF</button>
+            <button type="button" id="clearBtn" class="link">Clear form</button>
+        </div>
+        <p id="status" role="status"></p>
+    </form>
+
+    <section id="previewWrap">
+        <h2>Preview</h2>
+        <svg id="preview" viewBox="0 0 612 264" xmlns="http://www.w3.org/2000/svg"></svg>
+        <p class="hint">Preview is approximate. The PDF prints the text, labels and lines only, on your blank check stock.</p>
+    </section>
+</main>
+
+<section id="history">
+    <h2>Issued checks</h2>
+    <table>
+        <thead><tr><th>No.</th><th>Date</th><th>Payer</th><th class="num">Amount</th><th></th></tr></thead>
+        <tbody id="historyBody"></tbody>
+    </table>
+</section>
+
+<script src="shared/check.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
