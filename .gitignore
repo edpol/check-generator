@@ -3,3 +3,5 @@ IMG_1322.jpeg
 IMG_1323.jpeg
 node_modules/
 checks.db*
+php/
+php/config.local.php

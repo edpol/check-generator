@@ -55,6 +55,34 @@
     { field: 'micr', font: 'micr', size: 12, x: X(678), y: Y(772), align: 'left' },
   ];
 
+  // Stub copies of the check details on the two blank sections below the check. The perforations
+  // sit at about 253pt and 504pt (measured from IMG_1322.jpeg); each stub is laid out from its top.
+  const STUB_TOPS = [253, 504];
+  function stubItems(top) {
+    const L = 40, R = 572, t = top + 22;
+    return [
+      { field: 'payerName', font: 'serifBold', size: 10, x: L, y: t, align: 'left', upper: true },
+      { field: 'payerAddress1', font: 'serif', size: 9, x: L, y: t + 12, align: 'left', upper: true },
+      { field: 'payerAddress2', font: 'serif', size: 9, x: L, y: t + 23, align: 'left', upper: true },
+      { field: 'bankName', font: 'serifBold', size: 9, x: 300, y: t, align: 'center', upper: true },
+      { text: 'CHECK NO.', font: 'sans', size: 7, x: R - 90, y: t, align: 'left' },
+      { field: 'checkNumber', font: 'serif', size: 11, x: R, y: t, align: 'right', spacing: 1 },
+      { text: 'REFERENCE', font: 'sans', size: 7, x: L, y: t + 52, align: 'left' },
+      { field: 'reference', font: 'serif', size: 11, x: L, y: t + 65, align: 'left' },
+      { text: 'DATE', font: 'sans', size: 7, x: 250, y: t + 52, align: 'left' },
+      { field: 'dateText', font: 'serif', size: 11, x: 250, y: t + 65, align: 'left' },
+      { text: 'AMOUNT', font: 'sans', size: 7, x: 460, y: t + 52, align: 'left' },
+      { field: 'amountBox', font: 'serif', size: 11, x: 460, y: t + 65, align: 'left' },
+      { text: 'PAY TO', font: 'sans', size: 7, x: L, y: t + 95, align: 'left' },
+      { text: PAYEE.name, font: 'serif', size: 11, x: L, y: t + 108, align: 'left' },
+      { text: PAYEE.line1, font: 'serif', size: 11, x: L, y: t + 121, align: 'left' },
+      { text: PAYEE.line2, font: 'serif', size: 11, x: L, y: t + 134, align: 'left' },
+      { text: 'MEMO', font: 'sans', size: 7, x: L, y: t + 162, align: 'left' },
+      { field: 'memo', font: 'serifItalic', size: 10, x: L, y: t + 175, align: 'left' },
+    ];
+  }
+  for (const top of STUB_TOPS) items.push(...stubItems(top));
+
   const ONES = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN',
     'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN'];
   const TENS = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
@@ -76,7 +104,8 @@
     else {
       const parts = [];
       for (const [size, name] of [[1e9, 'BILLION'], [1e6, 'MILLION'], [1e3, 'THOUSAND']]) {
-        if (dollars >= size) parts.push(below1000(Math.floor(dollars / size) % 1000) + ' ' + name);
+        const chunk = Math.floor(dollars / size) % 1000;
+        if (chunk > 0) parts.push(below1000(chunk) + ' ' + name);
       }
       if (dollars % 1000) parts.push(below1000(dollars % 1000));
       words = parts.join(' ');

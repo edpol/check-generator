@@ -113,7 +113,7 @@
   function setStatus(msg, bad) { statusEl.textContent = msg; statusEl.classList.toggle('bad', !!bad); }
 
   async function loadNext() {
-    const r = await fetch('/api/next-number');
+    const r = await fetch('api/next-number');
     nextNumber = (await r.json()).next;
   }
 
@@ -124,7 +124,7 @@
     const win = mode === 'print' ? window.open('', '_blank') : null;
     const body = Object.fromEntries(new FormData(form).entries());
     try {
-      const r = await fetch('/api/checks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const r = await fetch('api/checks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const raw = await r.text();
       let data = null;
       try { data = JSON.parse(raw); } catch (_) {}
@@ -145,7 +145,7 @@
         }
         return;
       }
-      const url = `/api/checks/${data.id}/pdf` + (mode === 'download' ? '?download=1' : '');
+      const url = `api/checks/${data.id}/pdf` + (mode === 'download' ? '?download=1' : '');
       if (mode === 'print') win.location = url; else window.location = url;
       try { localStorage.setItem(LS_KEY, JSON.stringify({
         payerName: val('payerName'), payerAddress1: val('payerAddress1'), payerAddress2: val('payerAddress2'),
@@ -163,7 +163,7 @@
   }
 
   async function loadHistory() {
-    const rows = await (await fetch('/api/checks')).json();
+    const rows = await (await fetch('api/checks')).json();
     const body = document.getElementById('historyBody');
     body.replaceChildren();
     for (const c of rows) {
@@ -171,7 +171,7 @@
       const cell = (t, cls) => { const td = document.createElement('td'); td.textContent = t; if (cls) td.className = cls; tr.appendChild(td); return td; };
       cell(String(c.checkNumber)); cell(S.dateText(c.date)); cell(c.payerName); cell('$' + S.formatCents(c.amountCents), 'num');
       const act = cell('');
-      const a = document.createElement('a'); a.href = `/api/checks/${c.id}/pdf`; a.target = '_blank'; a.textContent = 'Reprint PDF';
+      const a = document.createElement('a'); a.href = `api/checks/${c.id}/pdf`; a.target = '_blank'; a.textContent = 'Reprint PDF';
       const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Use payer';
       b.addEventListener('click', () => {
         for (const n of ['payerName', 'payerAddress1', 'payerAddress2', 'bankName', 'routing', 'account']) form.elements[n].value = c[n];
