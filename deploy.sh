@@ -3,7 +3,7 @@
 set -euo pipefail
 
 main() {
-  cd "$(dirname "$0")"
+  cd "$(dirname "${BASH_SOURCE[0]}")"
   git pull origin main
   npm install --omit=dev
   pm2 restart checks
