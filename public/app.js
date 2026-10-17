@@ -147,13 +147,10 @@
       }
       const url = `api/checks/${data.id}/pdf` + (mode === 'download' ? '?download=1' : '');
       if (mode === 'print') win.location = url; else window.location = url;
-      try { localStorage.setItem(LS_KEY, JSON.stringify({
-        payerName: val('payerName'), payerAddress1: val('payerAddress1'), payerAddress2: val('payerAddress2'),
-        bankName: val('bankName'), routing: val('routing'), account: val('account') })); } catch (_) {}
       setStatus(`Check ${data.checkNumber} saved.`);
       nextNumber = data.next;
       form.elements.checkNumber.value = nextNumber;
-      for (const n of ['amount', 'reference', 'memo']) form.elements[n].value = '';
+      form.reset();
       form.elements.date.value = todayISO();
       updateHint(); render(); loadHistory();
     } catch (e) {
@@ -195,10 +192,8 @@
 
   (async function init() {
     form.elements.date.value = todayISO();
-    try {
-      const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-      if (saved) for (const k in saved) if (form.elements[k]) form.elements[k].value = saved[k];
-    } catch (_) {}
+    // Payer and bank details are no longer kept in the browser; drop anything stored by earlier versions.
+    try { localStorage.removeItem(LS_KEY); } catch (_) {}
     await loadNext();
     form.elements.checkNumber.value = nextNumber;
     updateHint();
