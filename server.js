@@ -29,7 +29,7 @@ function validate(body) {
   if (!Number.isInteger(c.checkNumber) || c.checkNumber < 1 || c.checkNumber > 99999999) errors.checkNumber = 'Enter a whole check number.';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(c.date) || Number.isNaN(Date.parse(c.date))) errors.date = 'Enter a valid date.';
   if (c.amountCents == null || c.amountCents <= 0) errors.amount = 'Enter an amount greater than 0.';
-  else if (c.amountCents > 99999999999) errors.amount = 'Amount is too large.';
+  else if (c.amountCents > 200000) errors.amount = 'Maximum amount is $2,000.00.';
   if (!c.payerName) errors.payerName = 'Required.';
   if (!c.payerAddress1) errors.payerAddress1 = 'Required.';
   if (!c.bankName) errors.bankName = 'Required.';
