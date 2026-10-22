@@ -10,6 +10,9 @@ const FONTS = {
 // Global calibration (points) for the printer; positive moves the print right / down.
 const OFFSET_X = Number(process.env.CHECK_OFFSET_X || 0);
 const OFFSET_Y = Number(process.env.CHECK_OFFSET_Y || 0);
+// The check stock already has the endorsement area printed on the back, so skip the back page.
+// Set CHECK_BACK_IS_PREPRINTED=false to print it ourselves.
+const BACK_IS_PREPRINTED = process.env.CHECK_BACK_IS_PREPRINTED !== 'false';
 
 // Back side (Check 21 / ANSI X9.100-111 endorsement area). The back page uses the same origin as
 // the front, so the check zone is the top of the page. The endorsement block is laid out in its
@@ -70,7 +73,7 @@ function render(check) {
     const top = it.y - doc._font.ascender / 1000 * it.size;
     doc.fillColor('#000').text(text, x + dx, top + dy, { lineBreak: false, characterSpacing: it.spacing || 0 });
   }
-  renderBack(doc);
+  if (!BACK_IS_PREPRINTED) renderBack(doc);
   doc.end();
   return doc;
 }
